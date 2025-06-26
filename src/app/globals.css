@@ -1,0 +1,51 @@
+@import 'tailwindcss';
+
+:root {
+    --color-green-50: #ecfdf6;
+    --color-green-100: #d1fae6;
+    --color-green-200: #a6f4d3;
+    --color-green-300: #6de8bb;
+    --color-green-400: #32d59e;
+    --color-green-500: #0ebb88;
+    --color-green-600: #03986f;
+    --color-green-700: #038262;
+    --color-green-800: #056049;
+    --color-green-900: #054f3d;
+    --color-green-950: #022c23;
+    --color-green-1000: #091c14;
+
+    --color-background: #f1f1f1;
+    --color-foreground: #010101;
+}
+
+@theme inline {
+    --font-sans: var(--font-sans);
+}
+
+html {
+    font-size: 1rem;
+}
+@media screen and (max-width: 1920px) {
+    html {
+        font-size: 1rem;
+    }
+}
+@media screen and (max-width: 1440px) {
+    html {
+        font-size: calc(0.39866369710467703rem + 0.6681514476614699vw);
+    }
+}
+@media screen and (max-width: 991px) {
+    html {
+        font-size: calc(0.7497474747474747rem + 0.40404040404040403vw);
+    }
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    @apply tracking-[-1.2%];
+}
