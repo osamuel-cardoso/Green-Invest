@@ -6,13 +6,10 @@ const container = tv({
 
     variants: {
         size: {
-            medium: '55rem',
-            large: '83.5rem',
+            small: 'max-w-[71.5rem]',
+            medium: 'max-w-[55rem]',
+            large: 'max-w-[83.5rem]',
         },
-    },
-
-    defaultVariants: {
-        size: 'large',
     },
 })
 

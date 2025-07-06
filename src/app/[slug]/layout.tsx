@@ -1,12 +1,18 @@
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
-import { Blog } from '@/components/Layout/Blog/index.layout'
 
-export default function Page() {
+export default async function Layout({
+    children,
+}: Readonly<{
+    params: {
+        slug: string
+    }
+    children: React.ReactNode
+}>) {
     return (
         <>
             <Header />
-            <Blog />
+            {children}
             <Footer />
         </>
     )

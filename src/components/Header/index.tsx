@@ -1,5 +1,4 @@
 'use client'
-import { Nav } from '@/components/Header/nav'
 import { AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 import { useState } from 'react'
@@ -7,16 +6,16 @@ import { Brand } from '../Brand'
 import { Button } from '../Button'
 import { Container } from '../Container'
 
-export default function Index() {
+export function Header() {
     const [isActive, setIsActive] = useState(false)
     function handleSetState(state: boolean) {
         setIsActive(state)
     }
 
     return (
-        <header className="z-10 w-full bg-white py-6">
+        <header className="z-10 w-full bg-white py-4 md:py-6">
             <Container>
-                <div className="relative flex justify-between">
+                <div className="relative flex items-center justify-between">
                     <Link href="/">
                         <Brand className="h-6 text-green-950" />
                     </Link>
@@ -32,9 +31,7 @@ export default function Index() {
                     </Button>
                 </div>
 
-                <AnimatePresence mode="wait">
-                    {isActive && <Nav />}
-                </AnimatePresence>
+                <AnimatePresence mode="wait"></AnimatePresence>
             </Container>
         </header>
     )

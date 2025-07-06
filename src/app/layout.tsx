@@ -15,7 +15,7 @@ export default function Root({
 }>) {
     return (
         <html lang="pt-br" className={`${aspekta.variable} antialiased`}>
-            <body>{children}</body>
+            <body className="isolate">{children}</body>
         </html>
     )
 }
