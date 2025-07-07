@@ -15,6 +15,8 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "framer-motion": "^12.19.1",
+    "graphql": "^16.11.0",
+    "graphql-request": "^7.2.0",
     "lucide-react": "^0.525.0",
     "markdown-to-jsx": "^7.7.10",
     "next": "15.3.4",
@@ -26,7 +28,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
+    "@types/node": "^20.19.4",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",

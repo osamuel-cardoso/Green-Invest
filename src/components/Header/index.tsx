@@ -13,7 +13,7 @@ export function Header() {
     }
 
     return (
-        <header className="z-10 w-full bg-white py-4 md:py-6">
+        <header className="z-10 w-full bg-white py-4">
             <Container>
                 <div className="relative flex items-center justify-between">
                     <Link href="/">

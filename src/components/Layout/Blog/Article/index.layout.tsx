@@ -7,12 +7,15 @@ import {
     BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
 import bgDecorativeImage from '@/images/blog_floater.svg'
-import sampleImage from '@/images/samples/istockphoto-1147544807-612x612.jpg'
+import { hygraph } from '@/lib/hygraph/hygraph'
+import { GET_POST_BY_SLUG } from '@/lib/hygraph/queries'
+import { GetPostResponse, Post } from '@/types/blog'
 import { Separator } from '@base-ui-components/react'
 import { Calendar, Clock } from 'lucide-react'
 import Markdown, { MarkdownToJSX } from 'markdown-to-jsx'
 import Image from 'next/image'
 import Link from 'next/link'
+import { notFound } from 'next/navigation'
 
 const markdownOptions: MarkdownToJSX.Options = {
     overrides: {
@@ -35,8 +38,7 @@ const markdownOptions: MarkdownToJSX.Options = {
         },
         h3: {
             props: {
-                className:
-                    'w-full text-[1.1875rem] font-bold text-emerald-950',
+                className: 'w-full text-[1.1875rem] font-bold text-emerald-950',
             },
             component: ({ children, ...props }) => (
                 <h3 {...props}>{children}</h3>
@@ -100,7 +102,7 @@ const markdownOptions: MarkdownToJSX.Options = {
         blockquote: {
             props: {
                 className:
-                    'mb-6 bg-neutral-50 rounded-[.3125rem] p-4  text-gray-700',
+                    'mb-6 bg-neutral-50 rounded-[.3125rem] p-4 text-gray-700',
             },
             component: ({ children, ...props }) => (
                 <blockquote {...props}>{children}</blockquote>
@@ -199,16 +201,61 @@ const markdownOptions: MarkdownToJSX.Options = {
     },
 }
 
-export function Article() {
+async function getPost(slug: string): Promise<Post | null> {
+    try {
+        const { post } = await hygraph.request<GetPostResponse>(
+            GET_POST_BY_SLUG,
+            { slug }
+        )
+        console.log(post)
+        return post
+    } catch (error) {
+        console.error('Erro ao buscar post:', error)
+        return null
+    }
+}
+
+export async function Article({
+    params,
+}: {
+    params: Promise<{ slug: string }>
+}) {
+    const { slug } = await params
+    const post = await getPost(slug)
+
+    if (!post) {
+        notFound()
+    }
+
+    // Verificar se publishedAt existe e não é null
+    if (!post.publishedAt) {
+        notFound()
+    }
+
+    const formattedDate = new Date(post.publishedAt).toLocaleDateString(
+        'pt-BR',
+        {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric',
+        }
+    )
+
     return (
         <main>
-            <ArticleHero />
-            <Content content={content} />
+            <ArticleHero post={post} formattedDate={formattedDate} />
+            <Content content={post.content?.markdown || ''} />
         </main>
     )
 }
 
-function ArticleHero() {
+function ArticleHero({
+    post,
+    formattedDate,
+}: {
+    post: Post
+    formattedDate: string
+}) {
     return (
         <section className="relative overflow-x-hidden pt-16 md:pt-24">
             <Container size="large">
@@ -228,45 +275,56 @@ function ArticleHero() {
                                 <BreadcrumbItem className="block text-sm text-neutral-300 uppercase opacity-50 hover:opacity-100">
                                     <BreadcrumbLink
                                         className="hover:text-neutral-50"
-                                        href="/"
+                                        href="/blog"
                                     >
-                                        Article
+                                        Blog
                                     </BreadcrumbLink>
                                 </BreadcrumbItem>
                             </BreadcrumbList>
                         </Breadcrumb>
                         <div className="flex w-full flex-col items-start justify-start gap-4">
                             <div className="flex flex-row items-start justify-start gap-1.5">
-                                <div className="flex flex-row items-center justify-center gap-2.5 rounded-full bg-emerald-900 px-[.875rem] py-[.3125rem]">
-                                    <p className="block text-sm text-emerald-50">
-                                        Finanças
-                                    </p>
-                                </div>
+                                {post.category?.map((cat, index) => (
+                                    <div
+                                        key={index}
+                                        className="flex flex-row items-center justify-center gap-2.5 rounded-full bg-emerald-900 px-[.875rem] py-[.3125rem]"
+                                    >
+                                        <p className="block text-sm text-emerald-50">
+                                            {cat.title}
+                                        </p>
+                                    </div>
+                                ))}
                             </div>
                             <h1 className="max-w-[50rem] text-5xl leading-[1.15] text-neutral-50">
-                                Balanço Patrimonial: tudo que você precisa saber
+                                {post.title}
                             </h1>
-                            <p className="block max-w-[40rem] leading-relaxed text-neutral-50">
-                                O balanço patrimonial ou balanço contábil,
-                                consiste em um relatório contábil que possui a
-                                principal finalidade de apresentar a situação
-                                financeira...
-                            </p>
+                            {post.excerpt && (
+                                <p className="block max-w-[40rem] leading-relaxed text-neutral-50">
+                                    {post.excerpt}
+                                </p>
+                            )}
                         </div>
                         <div className="flex flex-wrap gap-6 md:flex-row">
-                            <div className="flex items-center justify-start gap-2.5">
-                                <Image
-                                    className="h-6 w-6 rounded-full"
-                                    src={sampleImage}
-                                    alt="imagem ilustrativa."
-                                />
-                                <p className="block text-sm text-neutral-300">
-                                    Por{' '}
-                                    <span className="font-medium">
-                                        Jeferson Ferreira
-                                    </span>
-                                </p>
-                            </div>
+                            {post.author && (
+                                <div className="flex items-center justify-start gap-2.5">
+                                    {post.author?.picture && (
+                                        <Image
+                                            className="h-6 w-6 rounded-full"
+                                            src={post.author.picture.url}
+                                            alt={post.author?.name}
+                                            width={24}
+                                            height={24}
+                                        />
+                                    )}
+                                    <p className="block text-sm text-neutral-300">
+                                        Por{' '}
+                                        <span className="font-medium">
+                                            {post.author?.name}
+                                        </span>
+                                    </p>
+                                </div>
+                            )}
+
                             <Separator
                                 orientation="vertical"
                                 className="hidden h-5 w-px bg-emerald-50 opacity-10 md:block"
@@ -277,26 +335,41 @@ function ArticleHero() {
                                     className="text-emerald-600"
                                 />
                                 <p className="block text-sm text-neutral-300">
-                                    11 de janeiro de 2023
+                                    {formattedDate}
                                 </p>
                             </div>
-                            <Separator
-                                orientation="vertical"
-                                className="hidden h-5 w-px bg-emerald-50 opacity-10 md:block"
-                            />
-                            <div className="flex flex-row items-center justify-start gap-2.5">
-                                <Clock size={20} className="text-emerald-600" />
-                                <p className="block text-sm text-neutral-300">
-                                    3 minutos de leitura
-                                </p>
-                            </div>
+                            {post.timeSpentReading && (
+                                <>
+                                    <Separator
+                                        orientation="vertical"
+                                        className="hidden h-5 w-px bg-emerald-50 opacity-10 md:block"
+                                    />
+                                    <div className="flex flex-row items-center justify-start gap-2.5">
+                                        <Clock
+                                            size={20}
+                                            className="text-emerald-600"
+                                        />
+                                        <p className="block text-sm text-neutral-300">
+                                            {post.timeSpentReading}{' '}
+                                            {post.timeSpentReading === 1
+                                                ? 'minuto'
+                                                : 'minutos'}{' '}
+                                            de leitura
+                                        </p>
+                                    </div>
+                                </>
+                            )}
                         </div>
                     </div>
-                    <Image
-                        className="relative z-10 w-full rounded-[1.0625rem] object-cover md:h-[37.75rem]"
-                        src={sampleImage}
-                        alt="imagem ilustrativa."
-                    />
+                    {post.coverImage && (
+                        <Image
+                            className="relative z-10 w-full rounded-[1.0625rem] object-cover md:h-[37.75rem]"
+                            src={post.coverImage.url}
+                            alt={post.title}
+                            width={post.coverImage.width}
+                            height={post.coverImage.height}
+                        />
+                    )}
                 </div>
             </Container>
             <img
@@ -313,63 +386,16 @@ function Content({ content }: { content: string }) {
     return (
         <section className="py-16 md:py-24">
             <Container size="large">
-                <div className="grid grid-cols-2">
-                    <div className="prose prose-lg markdown-content max-w-none">
-                        <Markdown options={markdownOptions}>{content}</Markdown>
+                <div className="grid grid-cols-1 lg:grid-cols-2">
+                    <div className="lg:col-span-1">
+                        <div className="prose prose-lg markdown-content max-w-none">
+                            <Markdown options={markdownOptions}>
+                                {content}
+                            </Markdown>
+                        </div>
                     </div>
                 </div>
             </Container>
         </section>
     )
 }
-
-const content = `
-# Getting Started
-
-This guide will help you make your first requests to the sandbox API. Production endpoints will follow a similar process but with different URLs.
-
-## Overview
-
-Here's a four-step process for getting started with the Astra API:
-
-1. Create a developer account and generate API Keys
-2. Create a test user profile
-3. Authorize the client with the test user
-4. Make a request to the API
-
-### Optional
-
-You can view a code-based walkthrough of the user onboarding process by checking out our recipe section.
-
-## Developer Account Creation
-
-To create a developer account, follow these steps:
-
-1. Browse to the Sandbox Dashboard
-2. Enter your email and set a password
-3. Provide your first and last name and agree to the Developer Policy and Terms of Service
-4. Click **"Create Account"** to access the Dashboard panel
-5. Fill out the required fields to generate application credentials (Client ID and Client Secret)
-6. Click the **"Save Changes"** button to finalize the account setup
-
-## Accessing Developer Account
-
-You can log into the dashboard using your email and password. You can return to access your keys or edit redirect URIs at any time.
-
-### Redirect URIs Note
-
-> **Note:** Redirect URIs guide users back to a specific page in your application after exiting the SDK. Multiple Redirect URIs can be registered for flexibility.
-
-## User Intent Creation
-
-To make requests to the Astra API on behalf of an end user, you need to create user intent. This requires setting up a test user profile first.
-
-## API Key Generation
-
-Remember to complete the signup process and generate your API keys:
-
-- **Client ID**: Your unique application identifier
-- **Client Secret**: Your application's secret key
-
-Keep these credentials secure and never expose them in client-side code.
-`
