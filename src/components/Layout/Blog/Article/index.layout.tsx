@@ -257,7 +257,7 @@ function ArticleHero({
     formattedDate: string
 }) {
     return (
-        <section className="relative overflow-x-hidden pt-16 md:pt-24">
+        <section className="relative overflow-clip overflow-x-hidden pt-16 md:pt-24">
             <Container size="large">
                 <div className="flex flex-col gap-12 md:gap-16">
                     <div className="flex w-full flex-col items-start justify-start gap-8">
@@ -331,7 +331,7 @@ function ArticleHero({
                             />
                             <div className="flex items-center justify-start gap-2.5">
                                 <Calendar
-                                    size={20}
+                                    size={18}
                                     className="text-emerald-600"
                                 />
                                 <p className="block text-sm text-neutral-300">
@@ -346,7 +346,7 @@ function ArticleHero({
                                     />
                                     <div className="flex flex-row items-center justify-start gap-2.5">
                                         <Clock
-                                            size={20}
+                                            size={18}
                                             className="text-emerald-600"
                                         />
                                         <p className="block text-sm text-neutral-300">
@@ -377,7 +377,7 @@ function ArticleHero({
                 src={bgDecorativeImage.src}
                 alt="Decorativo."
             />
-            <div className="absolute top-0 right-0 left-0 -z-1 h-[80vh] w-full bg-emerald-950 lg:h-[100vh]"></div>
+            <div className="absolute top-0 right-0 left-0 -z-1 h-[70vh] w-full bg-emerald-950 lg:h-[100vh]"></div>
         </section>
     )
 }
