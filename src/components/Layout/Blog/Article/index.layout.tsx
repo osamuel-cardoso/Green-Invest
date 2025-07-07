@@ -377,7 +377,7 @@ function ArticleHero({
                 src={bgDecorativeImage.src}
                 alt="Decorativo."
             />
-            <div className="absolute top-0 right-0 left-0 -z-1 h-[65vh] w-full bg-emerald-950 lg:h-[100vh]"></div>
+            <div className="absolute top-0 right-0 left-0 -z-1 h-[80vh] w-full bg-emerald-950 lg:h-[100vh]"></div>
         </section>
     )
 }
