@@ -107,7 +107,7 @@ html {
 }
 @media screen and (max-width: 991px) {
     html {
-        font-size: calc(0.7497474747474747rem + 0.40404040404040403vw);
+        font-size: 14px;
     }
 }
 

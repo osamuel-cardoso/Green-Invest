@@ -295,7 +295,7 @@ function ArticleHero({
                                     </div>
                                 ))}
                             </div>
-                            <h1 className="max-w-[50rem] text-5xl leading-[1.15] text-neutral-50">
+                            <h1 className="max-w-[50rem] text-[2.5rem] md:text-5xl leading-[1.15] text-neutral-50">
                                 {post.title}
                             </h1>
                             {post.excerpt && (
@@ -377,7 +377,7 @@ function ArticleHero({
                 src={bgDecorativeImage.src}
                 alt="Decorativo."
             />
-            <div className="absolute top-0 right-0 left-0 -z-1 h-[70vh] w-full bg-emerald-950 lg:h-[100vh]"></div>
+            <div className="absolute top-0 right-0 left-0 -z-1 h-[65vh] w-full bg-emerald-950 lg:h-[100vh]"></div>
         </section>
     )
 }
