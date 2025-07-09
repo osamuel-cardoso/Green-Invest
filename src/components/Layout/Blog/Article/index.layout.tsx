@@ -6,16 +6,19 @@ import {
     BreadcrumbList,
     BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
+import { Post } from '@/gql/generated'
 import bgDecorativeImage from '@/images/blog_floater.svg'
 import { hygraph } from '@/lib/hygraph/hygraph'
 import { GET_POST_BY_SLUG } from '@/lib/hygraph/queries'
-import { GetPostResponse, Post } from '@/types/blog'
+import { extractTocFromMarkdown, TocItem } from '@/lib/utils'
+import { GetPostResponse } from '@/types/blog'
 import { Separator } from '@base-ui-components/react'
 import { Calendar, Clock } from 'lucide-react'
 import Markdown, { MarkdownToJSX } from 'markdown-to-jsx'
 import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+import { TableOfContents } from './TOC'
 
 const markdownOptions: MarkdownToJSX.Options = {
     overrides: {
@@ -207,7 +210,7 @@ async function getPost(slug: string): Promise<Post | null> {
             GET_POST_BY_SLUG,
             { slug }
         )
-        console.log(post)
+
         return post
     } catch (error) {
         console.error('Erro ao buscar post:', error)
@@ -227,12 +230,7 @@ export async function Article({
         notFound()
     }
 
-    // Verificar se publishedAt existe e não é null
-    if (!post.publishedAt) {
-        notFound()
-    }
-
-    const formattedDate = new Date(post.publishedAt).toLocaleDateString(
+    const formattedDate = new Date(post.publishedAt!).toLocaleDateString(
         'pt-BR',
         {
             day: 'numeric',
@@ -241,10 +239,17 @@ export async function Article({
         }
     )
 
+    const tocItems = post.content?.markdown
+        ? extractTocFromMarkdown(post.content.markdown)
+        : []
+
     return (
         <main>
             <ArticleHero post={post} formattedDate={formattedDate} />
-            <Content content={post.content?.markdown || ''} />
+            <Content
+                tocItems={tocItems}
+                content={post.content?.markdown || ''}
+            />
         </main>
     )
 }
@@ -295,7 +300,7 @@ function ArticleHero({
                                     </div>
                                 ))}
                             </div>
-                            <h1 className="max-w-[50rem] text-[2.5rem] md:text-5xl leading-[1.15] text-neutral-50">
+                            <h1 className="max-w-[50rem] text-[2.5rem] leading-[1.15] text-neutral-50 md:text-5xl">
                                 {post.title}
                             </h1>
                             {post.excerpt && (
@@ -366,8 +371,8 @@ function ArticleHero({
                             className="relative z-10 w-full rounded-[1.0625rem] object-cover md:h-[37.75rem]"
                             src={post.coverImage.url}
                             alt={post.title}
-                            width={post.coverImage.width}
-                            height={post.coverImage.height}
+                            width={post.coverImage.width!}
+                            height={post.coverImage.height!}
                         />
                     )}
                 </div>
@@ -382,11 +387,17 @@ function ArticleHero({
     )
 }
 
-function Content({ content }: { content: string }) {
+function Content({
+    content,
+    tocItems,
+}: {
+    content: string
+    tocItems: TocItem[]
+}) {
     return (
         <section className="py-16 md:py-24">
             <Container size="large">
-                <div className="grid grid-cols-1 lg:grid-cols-2">
+                <div className="grid grid-cols-1 items-start justify-items-center lg:grid-cols-2">
                     <div className="lg:col-span-1">
                         <div className="prose prose-lg markdown-content max-w-none">
                             <Markdown options={markdownOptions}>
@@ -394,6 +405,9 @@ function Content({ content }: { content: string }) {
                             </Markdown>
                         </div>
                     </div>
+                    {tocItems.length > 0 && (
+                        <TableOfContents items={tocItems} />
+                    )}
                 </div>
             </Container>
         </section>

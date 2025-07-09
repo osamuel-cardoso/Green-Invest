@@ -1,0 +1,56 @@
+query GetPostBySlug($slug: String!) {
+    post(where: { slug: $slug }) {
+        id
+        title
+        slug
+        excerpt
+        content {
+            markdown
+        }
+        category {
+            title
+        }
+        coverImage {
+            url
+            width
+            height
+        }
+        publishedAt
+        timeSpentReading
+        author {
+            name
+            picture {
+                url
+                height
+                width
+            }
+        }
+    }
+}
+
+query GetPosts {
+    posts(orderBy: publishedAt_DESC, where: { publishedAt_not: null }) {
+        id
+        title
+        slug
+        excerpt
+        category {
+            title
+        }
+        coverImage {
+            url
+            width
+            height
+        }
+        publishedAt
+        timeSpentReading
+        author {
+            name
+            picture {
+                url
+                height
+                width
+            }
+        }
+    }
+}
