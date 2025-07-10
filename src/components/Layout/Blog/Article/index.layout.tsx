@@ -13,7 +13,7 @@ import { GET_POST_BY_SLUG } from '@/lib/hygraph/queries'
 import { extractTocFromMarkdown, TocItem } from '@/lib/utils'
 import { GetPostResponse } from '@/types/blog'
 import { Separator } from '@base-ui-components/react'
-import { Calendar, Clock } from 'lucide-react'
+import { Calendar, Clock, Link2 } from 'lucide-react'
 import Markdown, { MarkdownToJSX } from 'markdown-to-jsx'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -22,6 +22,9 @@ import { TableOfContents } from './TOC'
 
 const markdownOptions: MarkdownToJSX.Options = {
     overrides: {
+        embed: {
+            component: ({ ...props }) => <embed {...props} />,
+        },
         h1: {
             props: {
                 className: 'pb-6 text-[1.3125rem] font-bold text-emerald-950',
@@ -33,7 +36,7 @@ const markdownOptions: MarkdownToJSX.Options = {
         h2: {
             props: {
                 className:
-                    'w-full pb-6 text-[1.3125rem] font-bold text-emerald-950',
+                    'w-full pb-4 text-[1.3125rem] font-bold text-emerald-950',
             },
             component: ({ children, ...props }) => (
                 <h2 {...props}>{children}</h2>
@@ -41,7 +44,8 @@ const markdownOptions: MarkdownToJSX.Options = {
         },
         h3: {
             props: {
-                className: 'w-full text-[1.1875rem] font-bold text-emerald-950',
+                className:
+                    'w-full pb-4 text-[1.1875rem] font-bold text-emerald-950',
             },
             component: ({ children, ...props }) => (
                 <h3 {...props}>{children}</h3>
@@ -49,7 +53,8 @@ const markdownOptions: MarkdownToJSX.Options = {
         },
         h4: {
             props: {
-                className: 'w-full text-[1.0625rem] font-bold text-emerald-950',
+                className:
+                    'w-full pb-4 text-[1.0625rem] font-bold text-emerald-950',
             },
             component: ({ children, ...props }) => (
                 <h4 {...props}>{children}</h4>
@@ -57,7 +62,7 @@ const markdownOptions: MarkdownToJSX.Options = {
         },
         h5: {
             props: {
-                className: 'w-full text-base font-bold text-emerald-950',
+                className: 'w-full pb-4 text-base font-bold text-emerald-950',
             },
             component: ({ children, ...props }) => (
                 <h5 {...props}>{children}</h5>
@@ -65,7 +70,7 @@ const markdownOptions: MarkdownToJSX.Options = {
         },
         h6: {
             props: {
-                className: 'w-full text-sm font-bold text-emerald-950',
+                className: 'w-full pb-4 text-sm font-bold text-emerald-950',
             },
             component: ({ children, ...props }) => (
                 <h6 {...props}>{children}</h6>
@@ -73,8 +78,7 @@ const markdownOptions: MarkdownToJSX.Options = {
         },
         p: {
             props: {
-                className:
-                    'mb-5 w-full tracking- text-[.9375rem] text-gray-600',
+                className: 'mb-6 w-full text-[.9375rem] text-gray-500',
             },
             component: ({ children, ...props }) => <p {...props}>{children}</p>,
         },
@@ -282,7 +286,7 @@ function ArticleHero({
                                         className="hover:text-neutral-50"
                                         href="/blog"
                                     >
-                                        Blog
+                                        {post.title}
                                     </BreadcrumbLink>
                                 </BreadcrumbItem>
                             </BreadcrumbList>
@@ -397,7 +401,7 @@ function Content({
     return (
         <section className="py-16 md:py-24">
             <Container size="large">
-                <div className="grid grid-cols-1 items-start justify-items-center lg:grid-cols-2">
+                <div className="flex flex-col-reverse items-start justify-items-center gap-12 md:grid md:grid-cols-1 lg:grid-cols-[0.75fr_0.5fr] lg:gap-12">
                     <div className="lg:col-span-1">
                         <div className="prose prose-lg markdown-content max-w-none">
                             <Markdown options={markdownOptions}>
@@ -405,9 +409,18 @@ function Content({
                             </Markdown>
                         </div>
                     </div>
-                    {tocItems.length > 0 && (
-                        <TableOfContents items={tocItems} />
-                    )}
+                    <div className="top-8 flex flex-col gap-6 lg:sticky">
+                        {tocItems.length > 0 && (
+                            <TableOfContents items={tocItems} />
+                        )}
+
+                        <div className="flex items-center gap-3 p-4">
+                            <Link2 className="text-emerald-700" size={'1rem'} />
+                            <span className="text-sm font-medium text-emerald-950 transition hover:text-green-700">
+                                Copiar link
+                            </span>
+                        </div>
+                    </div>
                 </div>
             </Container>
         </section>

@@ -60,3 +60,32 @@ export const GET_POSTS = gql`
         }
     }
 `
+
+export const GET_LAST_POST = gql`
+    query GetPostLastPost {
+        posts(orderBy: publishedAt_DESC, first: 1) {
+            id
+            title
+            slug
+            excerpt
+            category {
+                title
+            }
+            coverImage {
+                url
+                width
+                height
+            }
+            publishedAt
+            timeSpentReading
+            author {
+                name
+                picture {
+                    url
+                    height
+                    width
+                }
+            }
+        }
+    }
+`

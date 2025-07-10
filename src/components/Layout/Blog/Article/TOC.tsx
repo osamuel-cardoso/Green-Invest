@@ -1,15 +1,15 @@
 'use client'
 
 import { cn, TocItem } from '@/lib/utils'
+import { List } from 'lucide-react'
 
 import { useEffect, useState } from 'react'
 
 interface TableOfContentsProps {
     items: TocItem[]
-    className?: string
 }
 
-export function TOC({ items, className }: TableOfContentsProps) {
+export function TOC({ items }: TableOfContentsProps) {
     const [activeId, setActiveId] = useState<string>('')
 
     useEffect(() => {
@@ -27,7 +27,6 @@ export function TOC({ items, className }: TableOfContentsProps) {
             }
         )
 
-        // Observa todos os headings
         items.forEach(({ id }) => {
             const element = document.getElementById(id)
             if (element) {
@@ -69,14 +68,14 @@ export function TOC({ items, className }: TableOfContentsProps) {
     if (items.length === 0) return null
 
     return (
-        <nav
-            className={cn('sticky top-24 overflow-y-auto', className)}
-            aria-label="Índice"
-        >
-            <h3 className="mb-4 text-sm font-semibold text-emerald-950">
-                Neste artigo
-            </h3>
-            <ul className="space-y-2 text-sm">
+        <nav>
+            <ul className="rounded-[.5625rem] bg-[#05604905] pt-2 pr-4 pb-4 pl-2 text-[.8125rem]">
+                <div className="flex items-center gap-3 p-4">
+                    <List className="text-emerald-700" size={'1rem'} />
+                    <h3 className="text-sm font-medium text-emerald-950">
+                        Tabela de Conteúdos
+                    </h3>
+                </div>
                 {items.map((item) => (
                     <li
                         key={item.id}
@@ -88,11 +87,11 @@ export function TOC({ items, className }: TableOfContentsProps) {
                             href={`#${item.id}`}
                             onClick={(e) => handleClick(e, item.id)}
                             className={cn(
-                                'block py-1 text-gray-600 transition-colors hover:text-emerald-700',
-                                '-ml-px border-l-2 pl-3',
+                                'block py-1 text-gray-500 transition-colors hover:text-emerald-700',
+                                'border-l-2 pl-3',
                                 activeId === item.id
-                                    ? 'border-emerald-600 font-medium text-emerald-700'
-                                    : 'border-transparent hover:border-gray-300'
+                                    ? 'border-emerald-600 text-emerald-700'
+                                    : 'border-transparent hover:border-emerald-100'
                             )}
                         >
                             {item.text}
