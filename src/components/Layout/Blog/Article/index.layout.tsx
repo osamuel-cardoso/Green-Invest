@@ -27,7 +27,7 @@ const markdownOptions: MarkdownToJSX.Options = {
         },
         h1: {
             props: {
-                className: 'pb-6 text-[1.3125rem] font-bold text-emerald-950',
+                className: 'pb-6 text-[1.3125rem] font-bold text-emerald-700',
             },
             component: ({ children, ...props }) => (
                 <h1 {...props}>{children}</h1>
@@ -36,7 +36,7 @@ const markdownOptions: MarkdownToJSX.Options = {
         h2: {
             props: {
                 className:
-                    'w-full pb-4 text-[1.3125rem] font-bold text-emerald-950',
+                    'w-full pb-4 text-[1.3125rem] font-bold text-emerald-700',
             },
             component: ({ children, ...props }) => (
                 <h2 {...props}>{children}</h2>
@@ -45,7 +45,7 @@ const markdownOptions: MarkdownToJSX.Options = {
         h3: {
             props: {
                 className:
-                    'w-full pb-4 text-[1.1875rem] font-bold text-emerald-950',
+                    'w-full pb-4 text-[1.1875rem] font-bold text-emerald-700',
             },
             component: ({ children, ...props }) => (
                 <h3 {...props}>{children}</h3>
@@ -54,7 +54,7 @@ const markdownOptions: MarkdownToJSX.Options = {
         h4: {
             props: {
                 className:
-                    'w-full pb-4 text-[1.0625rem] font-bold text-emerald-950',
+                    'w-full pb-4 text-[1.0625rem] font-bold text-emerald-700',
             },
             component: ({ children, ...props }) => (
                 <h4 {...props}>{children}</h4>
@@ -62,7 +62,7 @@ const markdownOptions: MarkdownToJSX.Options = {
         },
         h5: {
             props: {
-                className: 'w-full pb-4 text-base font-bold text-emerald-950',
+                className: 'w-full pb-4 text-base font-bold text-emerald-700',
             },
             component: ({ children, ...props }) => (
                 <h5 {...props}>{children}</h5>
@@ -70,7 +70,7 @@ const markdownOptions: MarkdownToJSX.Options = {
         },
         h6: {
             props: {
-                className: 'w-full pb-4 text-sm font-bold text-emerald-950',
+                className: 'w-full pb-4 text-sm font-bold text-emerald-700',
             },
             component: ({ children, ...props }) => (
                 <h6 {...props}>{children}</h6>

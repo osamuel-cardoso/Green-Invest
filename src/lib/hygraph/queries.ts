@@ -33,8 +33,12 @@ export const GET_POST_BY_SLUG = gql`
 `
 
 export const GET_POSTS = gql`
-    query GetPosts {
-        posts(orderBy: publishedAt_DESC, where: { publishedAt_not: null }) {
+    query GetPosts($quantity: Int!) {
+        posts(
+            orderBy: publishedAt_DESC
+            where: { publishedAt_not: null }
+            first: $quantity
+        ) {
             id
             title
             slug
