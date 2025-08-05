@@ -171,7 +171,7 @@ async function Showcase() {
                 </div>
                 <div>
                     <div className="grid gap-6 md:grid-cols-3 md:gap-4">
-                        {posts?.splice(1).map((post) => {
+                        {posts?.map((post) => {
                             return (
                                 <Card
                                     href={post.slug}
@@ -249,7 +249,7 @@ function Card({
                     size={'1rem'}
                 />
                 <span className="text-sm font-medium text-emerald-700 transition group-hover:text-green-950">
-                    Copiar link
+                    Ler mais
                 </span>
             </div>
         </Link>

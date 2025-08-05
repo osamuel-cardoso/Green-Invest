@@ -1,6 +1,7 @@
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
 import { Blog } from '@/components/Layout/Blog/index.layout'
+import { CtaSection } from '@/components/sections/Cta.section'
 import { Post } from '@/gql/generated'
 import { hygraph } from '@/lib/hygraph/hygraph'
 import { GET_LAST_POST } from '@/lib/hygraph/queries'
@@ -30,6 +31,7 @@ export default async function Page() {
         <>
             <Header />
             <Blog data={post} />
+            <CtaSection />
             <Footer />
         </>
     )
