@@ -14,7 +14,7 @@ export function Header() {
 
     return (
         <header className="z-10 w-full bg-white py-4">
-            <Container>
+            <Container size='large'>
                 <div className="relative flex items-center justify-between">
                     <Link href="/">
                         <Brand className="h-6 text-green-950" />

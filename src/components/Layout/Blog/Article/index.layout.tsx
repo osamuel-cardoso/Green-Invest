@@ -1,4 +1,5 @@
 import { Container } from '@/components/Container'
+import { CtaSection } from '@/components/sections/Cta.section'
 import {
     Breadcrumb,
     BreadcrumbItem,
@@ -254,6 +255,7 @@ export async function Article({
                 tocItems={tocItems}
                 content={post.content?.markdown || ''}
             />
+            <CtaSection />
         </main>
     )
 }

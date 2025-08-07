@@ -5,7 +5,7 @@ import { Container } from './Container'
 
 export function Footer() {
     return (
-        <footer className="bg-green-950 py-6">
+        <footer className="bg-[#091c14] py-6">
             <Container size="large">
                 <div className="grid gap-12 gap-x-4 md:grid-cols-[0.75fr_1fr]">
                     <div className="grid gap-4 md:content-between">
